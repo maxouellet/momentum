@@ -375,7 +375,7 @@ std::vector<Vector3f> applyInverseSSD(
 
   TransformationList transformations(state.jointState.size());
   for (size_t i = 0; i < state.jointState.size(); i++) {
-    transformations[i] = state.jointState[i].transform * inverseBindPose[i];
+    transformations.at(i) = state.jointState[i].transform * inverseBindPose[i];
   }
 
   for (int i = 0; i != (int)skin.index.rows(); i++) {
@@ -397,12 +397,12 @@ std::vector<Vector3f> applyInverseSSD(
           j,
           skin.index(i, j),
           transformations.size());
-      const auto& transformation = transformations[skin.index(i, j)];
+      const auto& transformation = transformations.at(skin.index(i, j));
 
       transform.matrix().noalias() += transformation.matrix() * weight;
     }
 
-    res[i].noalias() = transform.inverse() * pos;
+    res.at(i).noalias() = transform.inverse() * pos;
   }
 
   return res;

@@ -137,8 +137,8 @@ averageTriangleSkinWeights(
       Eigen::Vector<uint32_t, kMaxSkinJoints>::Zero();
   for (size_t i = 0; i < kMaxSkinJoints; ++i) {
     if (i < sortedWeights.size()) {
-      resultWeights[i] = sortedWeights[i].first;
-      resultIndices[i] = sortedWeights[i].second;
+      resultWeights[i] = sortedWeights.at(i).first;
+      resultIndices[i] = sortedWeights.at(i).second;
     }
   }
 
@@ -430,8 +430,8 @@ std::vector<std::vector<size_t>> buildTriangleAdjacency(const Mesh& mesh) {
     // For each pair of triangles sharing this edge, mark them as adjacent
     for (size_t i = 0; i < triangles.size(); ++i) {
       for (size_t j = i + 1; j < triangles.size(); ++j) {
-        adjacency[triangles[i]].push_back(triangles[j]);
-        adjacency[triangles[j]].push_back(triangles[i]);
+        adjacency.at(triangles[i]).push_back(triangles[j]);
+        adjacency.at(triangles[j]).push_back(triangles[i]);
       }
     }
   }

@@ -46,7 +46,9 @@ addMesh(const fx::gltf::Document& model, const fx::gltf::Primitive& primitive, M
   }
   MT_CHECK(idxDense.size() % 3 == 0, "{} % 3 = {}", idxDense.size(), idxDense.size() % 3);
   std::vector<Vector3i> idx(idxDense.size() / 3);
-  std::copy_n(idxDense.data(), idxDense.size(), &idx[0][0]);
+  if (!idx.empty()) {
+    std::copy_n(idxDense.data(), idxDense.size(), &idx[0][0]);
+  }
 
   // load vertex position buffer
   auto pos = copyAccessorBuffer<Vector3f>(model, primitive.attributes.at("POSITION"));
@@ -183,7 +185,7 @@ size_t addBlendShapes(
       // Set the shape vector for this target
       if (iTarget < blendShapeNames.size()) {
         blendShape->setShapeVector(
-            iTarget, std::span<const Vector3f>(deltas), blendShapeNames[iTarget]);
+            iTarget, std::span<const Vector3f>(deltas), blendShapeNames.at(iTarget));
       } else {
         blendShape->setShapeVector(iTarget, std::span<const Vector3f>(deltas));
       }

@@ -380,7 +380,7 @@ void addActorAnimationToModel(
     animation.channels.emplace_back();
     auto& tchannel = animation.channels.back();
     tchannel.sampler =
-        createSampler<const Vector3f>(model, animation, markerPositions[j], timestampIdx);
+        createSampler<const Vector3f>(model, animation, markerPositions.at(j), timestampIdx);
     tchannel.target.node = nodeIndex;
     tchannel.target.path = "translation";
   }
@@ -454,7 +454,7 @@ size_t addMeshToModel(
             skin.index(i, b * 4 + 1),
             skin.index(i, b * 4 + 2),
             skin.index(i, b * 4 + 3));
-        weights[i] = Vector4f(
+        weights.at(i) = Vector4f(
             skin.weight(i, b * 4 + 0),
             skin.weight(i, b * 4 + 1),
             skin.weight(i, b * 4 + 2),

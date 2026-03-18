@@ -670,7 +670,7 @@ void parseBlendShapes(
           "Shape index {} out of bounds (shapeNames size: {})",
           currentShapes + shapeIndex,
           shapeNames.size());
-      shapeNames[currentShapes + shapeIndex] = shape->name;
+      shapeNames.at(currentShapes + shapeIndex) = shape->name;
       shapeIndex++;
     }
   }
@@ -815,7 +815,7 @@ void assignSkinWeights(
         weightSum <= 0, "Empty weight sum found for vertex {} in mesh {}", iVertex, meshName);
 
     for (int iPr = 0; iPr < curBoneWeights.size() && iPr < kMaxSkinJoints; ++iPr) {
-      const auto [boneIdx, weight] = curBoneWeights[iPr];
+      const auto [boneIdx, weight] = curBoneWeights.at(iPr);
       skinWeights->index(vertexOffset + iVertex, iPr) = boneIdx;
       skinWeights->weight(vertexOffset + iVertex, iPr) = weight / weightSum;
     }

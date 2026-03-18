@@ -225,7 +225,7 @@ std::vector<size_t> addMappedParameters(
 
     // Invalid joint index, so any model parameters are invalid too:
     for (SparseRowMatrixf::InnerIterator it(paramTransformOrig.transform, kJointParam); it; ++it) {
-      validParamsOrig[it.col()] = true;
+      validParamsOrig.at(it.col()) = true;
     }
   }
 
@@ -235,7 +235,7 @@ std::vector<size_t> addMappedParameters(
       paramTransformResult.name.begin(), paramTransformResult.name.end());
   for (Eigen::Index iParamOld = 0; iParamOld < paramTransformOrig.numAllModelParameters();
        ++iParamOld) {
-    if (!validParamsOrig[iParamOld]) {
+    if (!validParamsOrig.at(iParamOld)) {
       continue;
     }
 
@@ -244,7 +244,7 @@ std::vector<size_t> addMappedParameters(
         "Duplicate parameter {} found while merging parameter transforms.",
         paramTransformOrig.name[iParamOld]);
 
-    origParamToNewParam[iParamOld] = paramTransformResult.name.size();
+    origParamToNewParam.at(iParamOld) = paramTransformResult.name.size();
     paramTransformResult.name.push_back(paramTransformOrig.name[iParamOld]);
   }
 
@@ -262,7 +262,7 @@ std::vector<size_t> addMappedParameters(
 
     for (SparseRowMatrixf::InnerIterator it(paramTransformOrig.transform, kJointParam); it; ++it) {
       const auto iOldParam = it.col();
-      const auto iNewParam = origParamToNewParam[iOldParam];
+      const auto iNewParam = origParamToNewParam.at(iOldParam);
 
       if (iNewParam != SIZE_MAX) {
         tripletsNew.emplace_back((int)mappedJointParam, (int)iNewParam, it.value());
@@ -281,7 +281,7 @@ std::vector<size_t> addMappedParameters(
         continue;
       }
 
-      const auto iNewParam = origParamToNewParam[iOrigParam];
+      const auto iNewParam = origParamToNewParam.at(iOrigParam);
       if (iNewParam != kInvalidIndex) {
         paramTransformResult.parameterSets[paramSetOrig.first].set(iNewParam);
       }
@@ -572,7 +572,7 @@ Character replaceSkeletonHierarchy(
       while (tgtParent != kInvalidIndex) {
         const auto itr = combinedSkeletonJointMapping.find(tgtSkeleton.joints[tgtParent].name);
         if (itr != combinedSkeletonJointMapping.end()) {
-          tgtToCombinedWithParents[iTgtJoint] = itr->second;
+          tgtToCombinedWithParents.at(iTgtJoint) = itr->second;
           break;
         }
         tgtParent = tgtSkeleton.joints[iTgtJoint].parent;
@@ -602,7 +602,7 @@ Character removeJoints(const Character& character, std::span<const size_t> joint
   std::vector<bool> toRemove(character.skeleton.joints.size(), false);
   for (const auto& j : jointsToRemove) {
     MT_THROW_IF(j >= character.skeleton.joints.size(), "Invalid joint found in removeJoints.");
-    toRemove[j] = true;
+    toRemove.at(j) = true;
   }
 
   // Remove all joints parented under the target joints as well:
@@ -614,7 +614,7 @@ Character removeJoints(const Character& character, std::span<const size_t> joint
 
     size_t parent = iJoint;
     while (parent != kInvalidIndex) {
-      if (toRemove[parent]) {
+      if (toRemove.at(parent)) {
         shouldRemove = true;
         break;
       }
@@ -651,7 +651,7 @@ Character removeJoints(const Character& character, std::span<const size_t> joint
       size_t srcParent = iSrcJoint;
       // Anything skinned to a deleted joint should get skinned to its parent instead:
       while (srcParent != kInvalidIndex) {
-        srcToResultJointsWithParents[iSrcJoint] = srcToResultJoints[srcParent];
+        srcToResultJointsWithParents[iSrcJoint] = srcToResultJoints.at(srcParent);
         if (srcToResultJointsWithParents[iSrcJoint] != kInvalidIndex) {
           break;
         }
@@ -797,7 +797,7 @@ std::pair<std::vector<size_t>, std::vector<size_t>> createIndexMapping(
   std::vector<size_t> reverseMapping(activeElements.size(), kInvalidIndex);
   for (size_t i = 0; i < activeElements.size(); ++i) {
     if (activeElements[i]) {
-      reverseMapping[i] = forwardMapping.size();
+      reverseMapping.at(i) = forwardMapping.size();
       forwardMapping.push_back(i);
     }
   }
@@ -933,7 +933,7 @@ std::vector<bool> verticesToFaces(
         face[1] < static_cast<int>(activeVertices.size()) && face[2] >= 0 &&
         face[2] < static_cast<int>(activeVertices.size()) && activeVertices[face[0]] &&
         activeVertices[face[1]] && activeVertices[face[2]]) {
-      activeFaces[faceIdx] = true;
+      activeFaces.at(faceIdx) = true;
     }
   }
 
@@ -990,7 +990,7 @@ std::vector<bool> verticesToPolys(
         break;
       }
     }
-    activePolys[polyIdx] = allActive;
+    activePolys.at(polyIdx) = allActive;
     offset += polySize;
   }
   return activePolys;

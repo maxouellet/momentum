@@ -212,45 +212,45 @@ void createAnimationCurves(
     const size_t index = i * 9;
     skeletonNodes[i]->LclTranslation.GetCurveNode(true);
     if (skipActiveJointParamCheck || aj[jointIndex + 0]) {
-      animCurves[index + 0] = skeletonNodes[i]->LclTranslation.GetCurve(
+      animCurves.at(index + 0) = skeletonNodes[i]->LclTranslation.GetCurve(
           animBaseLayer, FBXSDK_CURVENODE_COMPONENT_X, true);
       animCurvesIndex.push_back(index + 0);
     }
     if (skipActiveJointParamCheck || aj[jointIndex + 1]) {
-      animCurves[index + 1] = skeletonNodes[i]->LclTranslation.GetCurve(
+      animCurves.at(index + 1) = skeletonNodes[i]->LclTranslation.GetCurve(
           animBaseLayer, FBXSDK_CURVENODE_COMPONENT_Y, true);
       animCurvesIndex.push_back(index + 1);
     }
     if (skipActiveJointParamCheck || aj[jointIndex + 2]) {
-      animCurves[index + 2] = skeletonNodes[i]->LclTranslation.GetCurve(
+      animCurves.at(index + 2) = skeletonNodes[i]->LclTranslation.GetCurve(
           animBaseLayer, FBXSDK_CURVENODE_COMPONENT_Z, true);
       animCurvesIndex.push_back(index + 2);
     }
     skeletonNodes[i]->LclRotation.GetCurveNode(true);
     if (skipActiveJointParamCheck || aj[jointIndex + 3]) {
-      animCurves[index + 3] =
+      animCurves.at(index + 3) =
           skeletonNodes[i]->LclRotation.GetCurve(animBaseLayer, FBXSDK_CURVENODE_COMPONENT_X, true);
       animCurvesIndex.push_back(index + 3);
     }
     if (skipActiveJointParamCheck || aj[jointIndex + 4]) {
-      animCurves[index + 4] =
+      animCurves.at(index + 4) =
           skeletonNodes[i]->LclRotation.GetCurve(animBaseLayer, FBXSDK_CURVENODE_COMPONENT_Y, true);
       animCurvesIndex.push_back(index + 4);
     }
     if (skipActiveJointParamCheck || aj[jointIndex + 5]) {
-      animCurves[index + 5] =
+      animCurves.at(index + 5) =
           skeletonNodes[i]->LclRotation.GetCurve(animBaseLayer, FBXSDK_CURVENODE_COMPONENT_Z, true);
       animCurvesIndex.push_back(index + 5);
     }
     skeletonNodes[i]->LclScaling.GetCurveNode(true);
     if (skipActiveJointParamCheck || aj[jointIndex + 6]) {
-      animCurves[index + 6] =
+      animCurves.at(index + 6) =
           skeletonNodes[i]->LclScaling.GetCurve(animBaseLayer, FBXSDK_CURVENODE_COMPONENT_X, true);
       animCurvesIndex.push_back(index + 6);
-      animCurves[index + 7] =
+      animCurves.at(index + 7) =
           skeletonNodes[i]->LclScaling.GetCurve(animBaseLayer, FBXSDK_CURVENODE_COMPONENT_Y, true);
       animCurvesIndex.push_back(index + 7);
-      animCurves[index + 8] =
+      animCurves.at(index + 8) =
           skeletonNodes[i]->LclScaling.GetCurve(animBaseLayer, FBXSDK_CURVENODE_COMPONENT_Z, true);
       animCurvesIndex.push_back(index + 8);
     }
@@ -268,7 +268,7 @@ void createAnimationCurves(
       continue;
     }
 
-    animCurves[ai]->KeyModifyBegin();
+    animCurves.at(ai)->KeyModifyBegin();
     for (size_t f = 0; f < jointValues.cols(); f++) {
       // set keyframe time
       time.SetSecondDouble(static_cast<double>(f) / framerate);
@@ -289,10 +289,10 @@ void createAnimationCurves(
         jointVal = std::pow(2.0f, jointVal);
       }
 
-      const auto keyIndex = animCurves[ai]->KeyAdd(time);
-      animCurves[ai]->KeySet(keyIndex, time, jointVal);
+      const auto keyIndex = animCurves.at(ai)->KeyAdd(time);
+      animCurves.at(ai)->KeySet(keyIndex, time, jointVal);
     }
-    animCurves[ai]->KeyModifyEnd();
+    animCurves.at(ai)->KeyModifyEnd();
   }
 }
 
